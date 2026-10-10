@@ -1,8 +1,8 @@
 """Split the five aligned mage sprites into four lossless layers and glow frames.
 
 Editable material lives in source/towers/mage/ (this script, pixel-v3/ drawings,
-modular/ layers and previews). The files the game loads are written to
-game/towers/mage/level-N/, where N is the game level 1–5 (drawings 0,1,2,3,5).
+modular/ layers and previews). Drawings 1,2,3,5 are written to game levels 2–5.
+The old drawing 0 remains in source; build_intermediate_modular.py creates game level 1.
 """
 
 from pathlib import Path
@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent
 SOURCE = ROOT / "pixel-v3"
 OUTPUT = ROOT / "modular"
 GAME = ROOT.parents[2] / "game" / "towers" / "mage"
-GAME_LEVEL = {0: 1, 1: 2, 2: 3, 3: 4, 5: 5}   # drawing level -> game level
+GAME_LEVEL = {1: 2, 2: 3, 3: 4, 5: 5}   # old drawing 0 is archived in source, not used in game
 SIZE = (1254, 1254)
 LEVELS = (0, 1, 2, 3, 5)
 PARTS = ("01-base.png", "02-upper-room.png", "03-roof.png", "04-crystal.png")
@@ -108,7 +108,10 @@ def split(level):
     source = Image.open(source_path).convert("RGBA")
     if source.size != SIZE:
         raise ValueError(f"Unexpected canvas: {source_path}: {source.size}")
-    pixels = np.asarray(source)
+    pixels = np.asarray(source).copy()
+    # Generated transparent pixels can carry invisible RGB values. Normalize
+    # those bytes so compositing remains exact without changing visible art.
+    pixels[pixels[:, :, 3] == 0, :3] = 0
     y = np.arange(SIZE[1], dtype=np.int16)[:, None]
     config = SEAMS[level]
     roof_edge, base_edge = profile(config["roof"]), profile(config["base"])
@@ -141,13 +144,14 @@ def split(level):
     if not np.array_equal(np.asarray(assembled), pixels):
         raise AssertionError(f"Level {level} did not reassemble pixel for pixel")
     assembled.save(folder / "tower-assembled.png")
-    game = GAME / f"level-{GAME_LEVEL[level]}"
-    game.mkdir(parents=True, exist_ok=True)
-    for image, name in zip(images[:3], ("base.png", "upper.png", "roof.png")):
-        image.save(game / name)
-    for index in range(5):
-        shimmer(images[3], level, index).save(game / f"crystal-{index + 1:02d}.png")
-    assembled.save(game / "tower.png")
+    if level in GAME_LEVEL:
+        game = GAME / f"level-{GAME_LEVEL[level]}"
+        game.mkdir(parents=True, exist_ok=True)
+        for image, name in zip(images[:3], ("base.png", "upper.png", "roof.png")):
+            image.save(game / name)
+        for index in range(5):
+            shimmer(images[3], level, index).save(game / f"crystal-{index + 1:02d}.png")
+        assembled.save(game / "tower.png")
     return {name: bounds(image) for name, image in zip(PARTS, images)}
 
 
@@ -185,7 +189,7 @@ def main():
         "crystal_animation_frames": 5,
         "full_tower_animation_frames": 5,
         "level_0_note": "This earliest tower has a wooden finial rather than a crystal; its fourth layer is static.",
-        "reassembly": "Pixel-identical to each source PNG using the four static parts.",
+        "reassembly": "Pixel-identical after normalizing invisible RGB in fully transparent pixels.",
         "parts_visible_bbox_px_exclusive": records,
     }
     (OUTPUT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

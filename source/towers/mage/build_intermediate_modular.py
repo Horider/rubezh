@@ -7,7 +7,9 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 
-ROOT = Path(__file__).resolve().parent / "modular" / "level-intermediate"
+SOURCE_ROOT = Path(__file__).resolve().parent
+ROOT = SOURCE_ROOT / "modular" / "level-intermediate"
+GAME = SOURCE_ROOT.parents[2] / "game" / "towers" / "mage" / "level-1"
 SOURCE = ROOT / "tower-source.png"
 SIZE = (1254, 1254)
 NAMES = ("01-base.png", "02-upper-room.png", "03-roof.png", "04-spire.png")
@@ -103,6 +105,20 @@ def charge(spire, frame):
     return out
 
 
+def idle(spire, frame):
+    if frame in (0, 4):
+        return spire.copy()
+    strength = (0, .45, 1, .45, 0)[frame]
+    pixels = np.asarray(spire).copy()
+    rgb = pixels[:, :, :3].astype(np.float32)
+    yy = np.arange(SIZE[1])[:, None]
+    straw = (yy < SOCKET_TOP) & (pixels[:, :, 3] > 0) & (rgb[:, :, 0] > 110)
+    rgb[straw] += np.array((7, 4, 2)) * strength
+    pixels[:, :, :3] = np.clip(rgb, 0, 255).astype(np.uint8)
+    pixels[pixels[:, :, 3] == 0, :3] = 0
+    return Image.fromarray(pixels, "RGBA")
+
+
 def main():
     source = Image.open(SOURCE).convert("RGBA")
     if source.size != SIZE:
@@ -118,14 +134,24 @@ def main():
     if not np.array_equal(np.asarray(assembled), np.asarray(source)):
         raise AssertionError("Four parts did not reconstruct the source exactly")
     assembled.save(ROOT / "tower-assembled.png")
+    GAME.mkdir(parents=True, exist_ok=True)
+    for part, name in zip(parts[:3], ("base.png", "upper.png", "roof.png")):
+        part.save(GAME / name)
+    assembled.save(GAME / "tower.png")
 
     strip = Image.new("RGBA", (SIZE[0]*5, SIZE[1]))
     preview = Image.new("RGBA", (240*5, 360), "#20242e")
     for index in range(5):
+        idle_frame = idle(parts[3], index)
+        idle_path = ROOT / "spire-anim" / f"frame-{index+1:02d}.png"
+        idle_path.parent.mkdir(parents=True, exist_ok=True)
+        idle_frame.save(idle_path)
+        idle_frame.save(GAME / f"crystal-{index+1:02d}.png")
         spire = charge(parts[3], index)
         charge_path = ROOT / "spire-charge" / f"frame-{index+1:02d}.png"
         charge_path.parent.mkdir(parents=True, exist_ok=True)
         spire.save(charge_path)
+        spire.save(GAME / f"charge-{index+1:02d}.png")
         tower = Image.new("RGBA", SIZE)
         for part in parts[:3]:
             tower.alpha_composite(part)

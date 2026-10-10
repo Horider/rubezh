@@ -45,8 +45,9 @@ source/
 | --- | --- |
 | `towers/archers/level-N.png` | `python -I source/tools/strip_flag.py tower-01-thatched.png tower-02-wooden-roof.png …` |
 | `towers/archers/pennant/level-N/` | `python -I source/tools/upgrade_pennant.py N <модуль 04-pennant.png> source/towers/archers/pennants/level-N/pennant.png`, затем `python -I source/tools/make_pennant.py source/towers/archers/pennants/level-N/pennant.png game/towers/archers/pennant/level-N` |
-| `towers/mage/level-N/` слои и кристалл | `python -I source/towers/mage/build_modular.py` (рисунки 0, 1, 2, 3, 5 → уровни 1–5) |
-| `towers/mage/level-N/charge-*` | `python -I source/towers/mage/build_crystal_charge.py` |
+| `towers/mage/level-1/` соломенная башня со шпилем | `python -I source/towers/mage/build_intermediate_modular.py` |
+| `towers/mage/level-2…5/` слои и кристалл | `python -I source/towers/mage/build_modular.py` (рисунки 1, 2, 3, 5 → уровни 2–5) |
+| `towers/mage/level-2…5/charge-*` | `python -I source/towers/mage/build_crystal_charge.py` |
 | `effects/magic-orb`, `effects/magic-ground` | `python -I source/effects/build_magic_effects.py` |
 | `map-anim/*` | `source/tools/make_waterfall.py`, `make_flags.py`, `make_tree.py`, `make_arch.py` (пишут в `game/map-anim/`) |
 

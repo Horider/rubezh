@@ -110,9 +110,9 @@
     {name:'Сланцевая',damage:112,range:286,rate:.48,cost:300}
   ];
   // Mage tower: slower, heavier magic bolts that also splash enemies standing next to the target.
-  // Art: towers/mage/level-N (built from the drawings 0,1,2,3,5 in source/towers/mage).
+  // Art: first mage stage uses the repaired straw tower; stages 2–5 use drawings 1,2,3,5.
   const mageData = [null,
-    {name:'Ветхая',damage:30,range:172,rate:1.45,cost:100,splash:44},
+    {name:'Соломенная',damage:30,range:172,rate:1.45,cost:100,splash:44},
     {name:'Замшелая',damage:48,range:192,rate:1.33,cost:110,splash:52},
     {name:'Чародейская',damage:74,range:212,rate:1.22,cost:160,splash:60},
     {name:'Сланцевая',damage:108,range:232,rate:1.1,cost:230,splash:68},

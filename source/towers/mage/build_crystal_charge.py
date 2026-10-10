@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent
 GAME = ROOT.parents[2] / "game" / "towers" / "mage"
-LEVELS = {0: 1, 1: 2, 2: 3, 3: 4, 5: 5}
+LEVELS = {0: None, 1: 2, 2: 3, 3: 4, 5: 5}
 SOCKET_TOP = {0: 130, 1: 147, 2: 119, 3: 173, 5: 198}
 SCALES = (1.0, 1.08, 1.17, 1.27, 1.12)
 ENERGY = (0.0, 0.23, 0.46, 0.76, 1.0)
@@ -80,13 +80,15 @@ def main() -> None:
         original = Image.open(src).convert("RGBA")
         output = ROOT / "modular" / f"level-{source_level}" / "crystal-charge"
         output.mkdir(parents=True, exist_ok=True)
-        game = GAME / f"level-{game_level}"
-        game.mkdir(parents=True, exist_ok=True)
+        game = GAME / f"level-{game_level}" if game_level else None
+        if game:
+            game.mkdir(parents=True, exist_ok=True)
         sheet = Image.new("RGBA", (original.width * 5, original.height))
         for frame in range(5):
             image = charge_frame(original, source_level, frame)
             image.save(output / f"frame-{frame+1:02d}.png")
-            image.save(game / f"charge-{frame+1:02d}.png")
+            if game:
+                image.save(game / f"charge-{frame+1:02d}.png")
             sheet.alpha_composite(image, (frame * original.width, 0))
         sheet.save(output / "sheet.png")
     print("Created five transparent charge frames for all five mage towers.")
