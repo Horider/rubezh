@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JEV · Кузница карт</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">⚔</div>
+      <div>
+        <h1>Кузница карт <span class="tag">JEV</span></h1>
+        <p>JEV ведёт армию · защита перестраивается по итогам боя · 10 карт по 8 башен</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="runBtn" class="btn primary">Запустить битву с JEV</button>
+      <button id="stopBtn" class="btn danger" hidden>Остановить</button>
+      <label class="btn" id="importLabel">Открыть JSON<input id="importFile" type="file" accept="application/json,.json" hidden></label>
+      <button id="exportBtn" class="btn" disabled>Скачать JSON</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side">
+      <section class="panel">
+        <h2>Противник</h2>
+        <label class="field"><span>Ключ OpenRouter</span><input id="apiKey" type="password" placeholder="sk-or-v1-…" autocomplete="off" spellcheck="false"></label>
+        <label class="check"><input id="remember" type="checkbox"> запомнить ключ в этом браузере</label>
+        <label class="field"><span>Модель</span>
+          <select id="model">
+            <option value="~typesafe/jev-latest">~typesafe/jev-latest — JEV, модель решений</option>
+            <option value="typesafe/jev-router">typesafe/jev-router — чат-роутер (пишет JSON)</option>
+          </select>
+        </label>
+        <p class="hint"><code>jev-latest</code> отвечает через <code>/api/alpha/decisions</code>: на каждую волну выбирает армию и дорогу, ≈1 с и $0.0002 за план. <code>jev-router</code> перенаправляет запрос в чат-модель (сейчас GPT), ≈35 с и $0.02.</p>
+        <label class="check"><input id="useJev" type="checkbox"> атакует JEV <span class="muted">(выкл. — локальный перебор)</span></label>
+      </section>
+
+      <section class="panel">
+        <h2>Генерация</h2>
+        <label class="field"><span>Сложность</span>
+          <select id="difficulty"></select>
+        </label>
+        <div class="row2">
+          <label class="field"><span>Сид</span><input id="seed" type="number" min="1" max="999999"></label>
+          <label class="field"><span>Раунды</span>
+            <select id="rounds"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+          </label>
+        </div>
+        <label class="field"><span>Карт одновременно</span>
+          <select id="parallel"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="5">5</option></select>
+        </label>
+        <button id="regenBtn" class="btn wide">Новый набор карт</button>
+        <div class="progress"><div id="progressBar"></div></div>
+        <p id="progressText" class="muted small"></p>
+      </section>
+
+      <section class="panel legend">
+        <h2>Башни</h2>
+        <ul id="towerLegend"></ul>
+        <h2>Армия JEV</h2>
+        <ul id="enemyLegend"></ul>
+      </section>
+
+      <section class="panel">
+        <h2>Журнал</h2>
+        <ol id="log" class="log"></ol>
+      </section>
+    </aside>
+
+    <main class="main">
+      <section class="cards" id="cards" aria-label="Карты"></section>
+
+      <section class="viewer">
+        <div class="viewer-head">
+          <div>
+            <h2 id="mapTitle">—</h2>
+            <p id="mapSub" class="muted"></p>
+          </div>
+          <div class="toggles">
+            <label class="chip"><input type="checkbox" id="ovFocus" checked><span>зона взгляда</span></label>
+            <label class="chip"><input type="checkbox" id="ovRoutes"><span>маршруты</span></label>
+            <label class="chip"><input type="checkbox" id="ovCoverage"><span>радиусы</span></label>
+          </div>
+        </div>
+        <div class="stage">
+          <canvas id="stage"></canvas>
+          <div class="hud" id="hud" hidden></div>
+        </div>
+        <div class="replay">
+          <select id="attackSelect" aria-label="Какую атаку показать"></select>
+          <button id="playBtn" class="btn icon" title="Пуск / пауза">▶</button>
+          <button id="restartBtn" class="btn icon" title="Сначала">↺</button>
+          <div class="speed" id="speedBtns" role="group" aria-label="Скорость">
+            <button data-speed="1">1×</button><button data-speed="2" class="on">2×</button><button data-speed="4">4×</button><button data-speed="8">8×</button>
+          </div>
+          <span class="spacer"></span>
+          <button id="pngBtn" class="btn">PNG карты</button>
+        </div>
+        <div class="metrics" id="metrics"></div>
+      </section>
+
+      <section class="details">
+        <div class="col" id="rounds-col"></div>
+        <div class="col" id="towers-col"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="engine.js"></script>
+  <script src="jev-client.js"></script>
+  <script src="pipeline.js"></script>
+  <script src="render.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+{
+  "schema": "tower-modular-family-v3-semantic-seams",
+  "canvas_px": [
+    1254,
+    1254
+  ],
+  "tower_visible_bbox_px_exclusive": [
+    242,
+    24,
+    1013,
+    1229
+  ],
+  "axis_x_px": 638,
+  "module_order_back_to_front": [
+    "parts/01-base.png",
+    "parts/02-upper-room.png",
+    "parts/03-roof.png",
+    "parts/04-pennant.png"
+  ],
+  "cut_method": "per-column material-boundary profiles, snapped to nearby pixel edges",
+  "roof_profiles": {
+    "straw": [
+      [
+        240,
+        468
+      ],
+      [
+        280,
+        480
+      ],
+      [
+        320,
+        494
+      ],
+      [
+        380,
+        516
+      ],
+      [
+        440,
+        539
+      ],
+      [
+        500,
+        573
+      ],
+      [
+        550,
+        599
+      ],
+      [
+        600,
+        614
+      ],
+      [
+        638,
+        621
+      ],
+      [
+        680,
+        612
+      ],
+      [
+        740,
+        586
+      ],
+      [
+        800,
+        554
+      ],
+      [
+        860,
+        532
+      ],
+      [
+        920,
+        507
+      ],
+      [
+        980,
+        483
+      ],
+      [
+        1010,
+        473
+      ]
+    ],
+    "wood": [
+      [
+        240,
+        448
+      ],
+      [
+        280,
+        456
+      ],
+      [
+        320,
+        473
+      ],
+      [
+        380,
+        497
+      ],
+      [
+        440,
+        523
+      ],
+      [
+        500,
+        546
+      ],
+      [
+        560,
+        571
+      ],
+      [
+        610,
+        594
+      ],
+      [
+        638,
+        606
+      ],
+      [
+        680,
+        590
+      ],
+      [
+        740,
+        564
+      ],
+      [
+        800,
+        538
+      ],
+      [
+        860,
+        512
+      ],
+      [
+        920,
+        486
+      ],
+      [
+        980,
+        461
+      ],
+      [
+        1010,
+        451
+      ]
+    ],
+    "metal": [
+      [
+        240,
+        461
+      ],
+      [
+        280,
+        476
+      ],
+      [
+        320,
+        493
+      ],
+      [
+        380,
+        516
+      ],
+      [
+        440,
+        539
+      ],
+      [
+        500,
+        561
+      ],
+      [
+        560,
+        584
+      ],
+      [
+        610,
+        604
+      ],
+      [
+        638,
+        616
+      ],
+      [
+        680,
+        602
+      ],
+      [
+        740,
+        577
+      ],
+      [
+        800,
+        554
+      ],
+      [
+        860,
+        530
+      ],
+      [
+        920,
+        505
+      ],
+      [
+        980,
+        479
+      ],
+      [
+        1010,
+        465
+      ]
+    ]
+  },
+  "balcony_base_profile": [
+    [
+      230,
+      715
+    ],
+    [
+      260,
+      729
+    ],
+    [
+      280,
+      741
+    ],
+    [
+      320,
+      760
+    ],
+    [
+      380,
+      780
+    ],
+    [
+      440,
+      803
+    ],
+    [
+      500,
+      829
+    ],
+    [
+      560,
+      851
+    ],
+    [
+      610,
+      875
+    ],
+    [
+      638,
+      891
+    ],
+    [
+      680,
+      874
+    ],
+    [
+      740,
+      850
+    ],
+    [
+      800,
+      826
+    ],
+    [
+      860,
+      802
+    ],
+    [
+      920,
+      778
+    ],
+    [
+      980,
+      751
+    ],
+    [
+      1010,
+      735
+    ]
+  ],
+  "towers": {
+    "tower-00-thatched": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "299188d72b6aac8466432a0ecfab6e014b05c212004a7b0ca9488152633d6b23",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          264,
+          731,
+          966,
+          1229
+        ],
+        "02-upper-room.png": [
+          242,
+          468,
+          1013,
+          895
+        ],
+        "03-roof.png": [
+          242,
+          191,
+          1013,
+          624
+        ],
+        "04-pennant.png": [
+          579,
+          24,
+          919,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-00-thatched.png",
+      "source_bbox_px_exclusive": [
+        234,
+        34,
+        1021,
+        1229
+      ]
+    },
+    "tower-01-thatched": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "0b59dc050a099186da474d304b485ae200e0c544e9c93b49af6913a8f03050c1",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          297,
+          765,
+          955,
+          1229
+        ],
+        "02-upper-room.png": [
+          253,
+          469,
+          1000,
+          891
+        ],
+        "03-roof.png": [
+          242,
+          191,
+          1013,
+          623
+        ],
+        "04-pennant.png": [
+          576,
+          24,
+          917,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-01-thatched.png",
+      "source_bbox_px_exclusive": [
+        235,
+        33,
+        1022,
+        1234
+      ]
+    },
+    "tower-02-wooden-roof": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "05327416ecbecaab7c6ee3c1823f6b7c539ef73baf6c32531553e39225733c5b",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          287,
+          762,
+          968,
+          1229
+        ],
+        "02-upper-room.png": [
+          242,
+          447,
+          1013,
+          891
+        ],
+        "03-roof.png": [
+          242,
+          191,
+          1013,
+          611
+        ],
+        "04-pennant.png": [
+          580,
+          24,
+          910,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-02-wooden-roof.png",
+      "source_bbox_px_exclusive": [
+        235,
+        29,
+        1025,
+        1227
+      ]
+    },
+    "tower-03-mossy-stone": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "5b147412afe02a4bd7d65e2826e8f563936cd284098cafb5679adcc75dffa963",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          272,
+          759,
+          984,
+          1229
+        ],
+        "02-upper-room.png": [
+          242,
+          448,
+          1013,
+          891
+        ],
+        "03-roof.png": [
+          246,
+          191,
+          1005,
+          601
+        ],
+        "04-pennant.png": [
+          579,
+          24,
+          919,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-03-mossy-stone.png",
+      "source_bbox_px_exclusive": [
+        255,
+        21,
+        1017,
+        1228
+      ]
+    },
+    "tower-04-reinforced-roof": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "2dd8fa30c2c076866e165d0ced4eb894b854adf3643cacb4b8ff194a0bc5c68b",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          288,
+          763,
+          971,
+          1229
+        ],
+        "02-upper-room.png": [
+          242,
+          462,
+          1013,
+          891
+        ],
+        "03-roof.png": [
+          242,
+          191,
+          1013,
+          617
+        ],
+        "04-pennant.png": [
+          579,
+          24,
+          925,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-04-reinforced-roof.png",
+      "source_bbox_px_exclusive": [
+        232,
+        24,
+        1018,
+        1232
+      ]
+    },
+    "tower-05-slate-roof-clean": {
+      "assembled_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ],
+      "assembled_sha256": "6df8072c22524b776f9914debf26ba377172ef8404e1850d5ff5ff561bc3f673",
+      "parts_bbox_px_exclusive": {
+        "01-base.png": [
+          280,
+          761,
+          974,
+          1229
+        ],
+        "02-upper-room.png": [
+          242,
+          462,
+          1013,
+          891
+        ],
+        "03-roof.png": [
+          243,
+          191,
+          1011,
+          619
+        ],
+        "04-pennant.png": [
+          578,
+          24,
+          933,
+          221
+        ]
+      },
+      "source": "C:\\Users\\Aleks\\Desktop\\TD\\tower-assets\\tower-05-slate-roof-clean.png",
+      "source_bbox_px_exclusive": [
+        242,
+        24,
+        1013,
+        1229
+      ]
+    }
+  }
+}

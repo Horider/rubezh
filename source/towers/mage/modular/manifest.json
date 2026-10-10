@@ -1,0 +1,158 @@
+{
+  "schema": "mage-tower-modular-v1",
+  "canvas_px": [
+    1254,
+    1254
+  ],
+  "source": "../pixel-v3/mage-tower-level-{level}-pixel.png",
+  "levels": [
+    0,
+    1,
+    2,
+    3,
+    5
+  ],
+  "order_back_to_front": [
+    "parts/01-base.png",
+    "parts/02-upper-room.png",
+    "parts/03-roof.png",
+    "parts/04-crystal.png"
+  ],
+  "crystal_animation_fps": 6,
+  "crystal_animation_frames": 5,
+  "full_tower_animation_frames": 5,
+  "level_0_note": "This earliest tower has a wooden finial rather than a crystal; its fourth layer is static.",
+  "reassembly": "Pixel-identical to each source PNG using the four static parts.",
+  "parts_visible_bbox_px_exclusive": {
+    "0": {
+      "01-base.png": [
+        297,
+        806,
+        956,
+        1230
+      ],
+      "02-upper-room.png": [
+        316,
+        567,
+        942,
+        868
+      ],
+      "03-roof.png": [
+        292,
+        93,
+        962,
+        645
+      ],
+      "04-crystal.png": [
+        580,
+        25,
+        683,
+        146
+      ]
+    },
+    "1": {
+      "01-base.png": [
+        292,
+        780,
+        962,
+        1230
+      ],
+      "02-upper-room.png": [
+        302,
+        534,
+        952,
+        855
+      ],
+      "03-roof.png": [
+        318,
+        116,
+        932,
+        625
+      ],
+      "04-crystal.png": [
+        580,
+        25,
+        685,
+        172
+      ]
+    },
+    "2": {
+      "01-base.png": [
+        292,
+        770,
+        962,
+        1230
+      ],
+      "02-upper-room.png": [
+        301,
+        529,
+        953,
+        828
+      ],
+      "03-roof.png": [
+        342,
+        121,
+        911,
+        610
+      ],
+      "04-crystal.png": [
+        575,
+        25,
+        682,
+        144
+      ]
+    },
+    "3": {
+      "01-base.png": [
+        292,
+        790,
+        962,
+        1230
+      ],
+      "02-upper-room.png": [
+        298,
+        561,
+        956,
+        855
+      ],
+      "03-roof.png": [
+        340,
+        205,
+        914,
+        638
+      ],
+      "04-crystal.png": [
+        558,
+        25,
+        691,
+        205
+      ]
+    },
+    "5": {
+      "01-base.png": [
+        292,
+        822,
+        962,
+        1230
+      ],
+      "02-upper-room.png": [
+        299,
+        590,
+        955,
+        884
+      ],
+      "03-roof.png": [
+        321,
+        236,
+        933,
+        680
+      ],
+      "04-crystal.png": [
+        532,
+        25,
+        720,
+        236
+      ]
+    }
+  }
+}

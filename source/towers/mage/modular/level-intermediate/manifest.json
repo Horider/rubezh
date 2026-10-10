@@ -1,0 +1,20 @@
+{
+  "schema": "mage-intermediate-modular-v1",
+  "canvas_px": [
+    1254,
+    1254
+  ],
+  "order_back_to_front": [
+    "parts/01-base.png",
+    "parts/02-upper-room.png",
+    "parts/03-roof.png",
+    "parts/04-spire.png"
+  ],
+  "charge_frames": 5,
+  "charge_layer": "spire-charge/frame-{01..05}.png",
+  "assembled_charge": "tower-charge/frame-{01..05}.png",
+  "next_effects": [
+    "assets/magic-orb-v2",
+    "assets/magic-ground-v2"
+  ]
+}

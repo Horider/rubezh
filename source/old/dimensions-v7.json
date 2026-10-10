@@ -1,0 +1,220 @@
+{
+  "schema": "tower-modular-family-v7",
+  "canvas_px": [
+    1254,
+    1254
+  ],
+  "tower_visible_bbox_px_exclusive": [
+    245,
+    25,
+    1009,
+    1218
+  ],
+  "tower_visible_size_px": [
+    764,
+    1193
+  ],
+  "axis_x_px": 625,
+  "alpha_threshold_for_bbox": 5,
+  "module_order_back_to_front": [
+    "parts/01-base.png",
+    "parts/02-upper-room.png",
+    "parts/03-roof.png",
+    "parts/04-pennant.png"
+  ],
+  "wood_eave_pixels_moved_from_roof_to_upper_room": 6685,
+  "styles": {
+    "template": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            248,
+            708,
+            992,
+            1218
+          ],
+          "visible_size_px": [
+            744,
+            510
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            245,
+            434,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            764,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            189,
+            1007,
+            580
+          ],
+          "visible_size_px": [
+            762,
+            391
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            887,
+            247
+          ],
+          "visible_size_px": [
+            318,
+            222
+          ]
+        }
+      }
+    },
+    "01-weathered": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            247,
+            707,
+            994,
+            1218
+          ],
+          "visible_size_px": [
+            747,
+            511
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            247,
+            434,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            762,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            187,
+            1009,
+            580
+          ],
+          "visible_size_px": [
+            764,
+            393
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            893,
+            247
+          ],
+          "visible_size_px": [
+            324,
+            222
+          ]
+        }
+      }
+    },
+    "02-finished": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            279,
+            737,
+            975,
+            1218
+          ],
+          "visible_size_px": [
+            696,
+            481
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            245,
+            434,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            764,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            247,
+            188,
+            1006,
+            580
+          ],
+          "visible_size_px": [
+            759,
+            392
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            880,
+            247
+          ],
+          "visible_size_px": [
+            311,
+            222
+          ]
+        }
+      }
+    }
+  }
+}

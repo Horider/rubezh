@@ -1,0 +1,347 @@
+{
+  "schema": "tower-dreamina-modular-v1",
+  "canvas_px": [
+    1254,
+    1254
+  ],
+  "tower_visible_bbox_px_exclusive": [
+    245,
+    25,
+    1009,
+    1218
+  ],
+  "tower_visible_size_px": [
+    764,
+    1193
+  ],
+  "axis_x_px": 625,
+  "alpha_threshold_for_bbox": 5,
+  "module_order_back_to_front": [
+    "parts/01-base.png",
+    "parts/02-upper-room.png",
+    "parts/03-roof.png",
+    "parts/04-pennant.png"
+  ],
+  "styles": {
+    "01-turquoise-3d": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            245,
+            707,
+            994,
+            1218
+          ],
+          "visible_size_px": [
+            749,
+            511
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            245,
+            440,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            764,
+            426
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            189,
+            1008,
+            583
+          ],
+          "visible_size_px": [
+            763,
+            394
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            893,
+            240
+          ],
+          "visible_size_px": [
+            324,
+            215
+          ]
+        }
+      }
+    },
+    "02-wood-roof": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            276,
+            737,
+            975,
+            1218
+          ],
+          "visible_size_px": [
+            699,
+            481
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            245,
+            434,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            764,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            208,
+            1009,
+            580
+          ],
+          "visible_size_px": [
+            764,
+            372
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            892,
+            247
+          ],
+          "visible_size_px": [
+            323,
+            222
+          ]
+        }
+      }
+    },
+    "03-thatch-wood": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            290,
+            739,
+            965,
+            1218
+          ],
+          "visible_size_px": [
+            675,
+            479
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            250,
+            434,
+            1007,
+            866
+          ],
+          "visible_size_px": [
+            757,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            208,
+            1009,
+            584
+          ],
+          "visible_size_px": [
+            764,
+            376
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            889,
+            247
+          ],
+          "visible_size_px": [
+            320,
+            222
+          ]
+        }
+      }
+    },
+    "04-emblem-turquoise": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            245,
+            707,
+            994,
+            1218
+          ],
+          "visible_size_px": [
+            749,
+            511
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            245,
+            440,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            764,
+            426
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            245,
+            189,
+            1009,
+            583
+          ],
+          "visible_size_px": [
+            764,
+            394
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            569,
+            25,
+            893,
+            241
+          ],
+          "visible_size_px": [
+            324,
+            216
+          ]
+        }
+      }
+    },
+    "05-damaged-wood": {
+      "assembled": {
+        "bbox_px_exclusive": [
+          245,
+          25,
+          1009,
+          1218
+        ],
+        "visible_size_px": [
+          764,
+          1193
+        ]
+      },
+      "parts": {
+        "01-base.png": {
+          "bbox_px_exclusive": [
+            245,
+            716,
+            994,
+            1218
+          ],
+          "visible_size_px": [
+            749,
+            502
+          ]
+        },
+        "02-upper-room.png": {
+          "bbox_px_exclusive": [
+            303,
+            434,
+            1009,
+            866
+          ],
+          "visible_size_px": [
+            706,
+            432
+          ]
+        },
+        "03-roof.png": {
+          "bbox_px_exclusive": [
+            301,
+            216,
+            1008,
+            580
+          ],
+          "visible_size_px": [
+            707,
+            364
+          ]
+        },
+        "04-pennant.png": {
+          "bbox_px_exclusive": [
+            584,
+            25,
+            985,
+            261
+          ],
+          "visible_size_px": [
+            401,
+            236
+          ]
+        }
+      }
+    }
+  }
+}
