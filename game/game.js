@@ -262,7 +262,7 @@
     note.textContent=!type?'Откроется позже':gold<cost?'Нужно ещё '+(cost-gold)+' ◆':cost+' ◆';
   }
   function positionBuildMenu(){
-    if(!buildMenu.hidden&&selected!==null)positionRing(buildMenu,pads[selected].x,pads[selected].y-8);
+    if(!buildMenu.hidden&&selected!==null)positionRing(buildMenu,pads[selected].x,pads[selected].y);
     if(!towerMenu.hidden&&selected!==null)positionRing(towerMenu,pads[selected].x,pads[selected].y-52);
   }
   function positionRing(menu,cx,cy){
@@ -276,49 +276,46 @@
       }
       return;
     }
-    if(menu===towerMenu&&window.matchMedia('(orientation:landscape)').matches){
-      menu.style.removeProperty('left');menu.style.removeProperty('top');
-      const card=document.getElementById('towerInfo');
-      card.style.removeProperty('margin-left');card.style.removeProperty('top');card.style.removeProperty('bottom');
-      return;
-    }
     const width=canvas.clientWidth;
     // On wide phones the map is uniformly zoomed and its decorative bottom is clipped.
     // Keep selectors inside the visible part of the canvas.
     const height=Math.min(canvas.clientHeight,window.innerHeight-canvas.getBoundingClientRect().top-4);
     // Ring size follows the canvas so it never swallows neighbouring pads.
-    const size=Math.max(42,Math.min(60,width*.042)),r=Math.max(52,Math.min(80,width*.05));
-    const reach=(menu===towerMenu?r:r*.71)+size/2+6;
+    const size=Math.max(42,Math.min(60,width*.042));
+    let r=Math.max(52,Math.min(80,width*.05));
+    const x=cx/W*width,y=cy/H*canvas.clientHeight;
+    const rect=canvas.getBoundingClientRect(),landscape=window.matchMedia('(orientation:landscape)').matches;
+    const anchorX=landscape?rect.left+x:canvas.offsetLeft+x;
+    const anchorY=landscape?rect.top+y:canvas.offsetTop+y;
+    if(menu===towerMenu&&landscape)r=Math.max(18,Math.min(r,anchorX-size/2-8,window.innerWidth-anchorX-size/2-8,anchorY-8,window.innerHeight-anchorY-8));
+    const reach=r+size/2+6;
     menu.style.setProperty('--size',size+'px');menu.style.setProperty('--r',r+'px');
-    const x=cx/W*width,y=cy/H*height;
-    let top=Math.max(reach,Math.min(height-reach,y));
-    // Keep the two entrance-pad choices clear of the wave shield on short screens.
-    if(menu===buildMenu&&window.matchMedia('(pointer:coarse) and (orientation:landscape)').matches&&height<500&&cy<300&&Math.abs(cx-SHIELD_POS.x)<250){
-      top=Math.max(top,Math.min(166,height-120));
-    }
-    const left=Math.max(reach,Math.min(width-reach,x));
-    menu.style.left=left+'px';
-    menu.style.top=top+'px';
+    menu.style.left=anchorX+'px';
+    menu.style.top=anchorY+'px';
     if(menu===buildMenu){
-      menu.classList.toggle('plaque-above',top+reach+44>height);
+      const d=r*.71,topEdge=cy<300,bottomEdge=y+reach+60>height;
+      const rowGap=size+10;
+      menu.classList.toggle('edge-top',topEdge);
+      menu.classList.toggle('edge-bottom',!topEdge&&bottomEdge);
+      menu.style.setProperty('--left-d',-d+'px');menu.style.setProperty('--right-d',d+'px');
+      menu.style.setProperty('--top-d',(topEdge?d:bottomEdge?-d-rowGap:-d)+'px');
+      menu.style.setProperty('--bottom-d',(topEdge?d+rowGap:bottomEdge?-d:d)+'px');
+      menu.style.setProperty('--plaque-offset',(d+rowGap+size/2+14)+'px');
+      if(bottomEdge&&!topEdge)menu.style.setProperty('--r',Math.max(16,Math.min(r,height-y-8))+'px');
+      menu.classList.toggle('plaque-above',!topEdge&&bottomEdge);
       const plaque=menu.querySelector('.build-plaque'),pw=plaque.offsetWidth;
-      plaque.style.marginLeft=Math.max(8+pw/2-left,Math.min(width-8-pw/2-left,0))+'px';
+      const centerX=landscape?anchorX:x,boundWidth=landscape?window.innerWidth:width;
+      plaque.style.marginLeft=Math.max(8+pw/2-centerX,Math.min(boundWidth-8-pw/2-centerX,0))+'px';
       return;
     }
-    // Place the tower card below, above, or beside the ring according to free space.
+    // Keep the two action buttons centered on the tower; only the info card changes side.
     const card=document.getElementById('towerInfo'),cw=card.offsetWidth,ch=card.offsetHeight;
-    const below=top+reach+12,above=top-reach-ch-12;
-    let cardTop,cardLeft=Math.max(8,Math.min(width-8-cw,left-cw/2));
-    if(below+ch<=height-8)cardTop=below;
-    else if(above>=8)cardTop=above;
-    else{
-      cardTop=Math.max(8,Math.min(height-ch-8,top+reach/2));
-      const right=left+reach+12;
-      cardLeft=right+cw<=width-8?right:Math.max(8,left-reach-12-cw);
-    }
-    menu.classList.toggle('plaque-above',cardTop<top);
-    card.style.top=(cardTop-top)+'px';card.style.bottom='auto';
-    card.style.marginLeft=(cardLeft-left)+'px';
+    const screenX=rect.left+x,screenY=rect.top+y;
+    const right=screenX+reach+12,left=screenX-reach-12-cw;
+    const cardLeft=right+cw<=window.innerWidth-8?right:left>=8?left:Math.max(8,Math.min(window.innerWidth-cw-8,right));
+    const cardTop=Math.max(8,Math.min(window.innerHeight-ch-8,screenY-ch/2));
+    card.style.left=(cardLeft-screenX)+'px';card.style.top=(cardTop-screenY)+'px';
+    card.style.bottom='auto';card.style.marginLeft='0';
   }
   function buildTower(p,type=p.type){
     if(ended||p.level>=5)return;

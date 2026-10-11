@@ -173,10 +173,18 @@
   .rotate-prompt p{margin:0;font-size:15px;color:#d9dfcf;}
 }
 @media(prefers-reduced-motion:reduce){.tower-info{animation:none;}}
-/* The built-tower actions stay centered even when a tower is near a screen edge. */
+/* Menus stay anchored to the selected pad or tower, including near map edges. */
 @media (orientation:landscape){
-  .tower-menu{position:fixed;left:50%;top:50%;width:0;height:0;pointer-events:none;}
-  .tower-menu .tower-info,.tower-menu.plaque-above .tower-info{position:absolute;left:calc(var(--r) + var(--size)/2 + 8px);top:0;width:min(228px,calc(50vw - 100px));margin:0!important;transform:translateY(-50%);animation:none;}
+  .build-menu{position:fixed;z-index:5;}
+  .build-menu:not(.tower-menu) .pos-nw{--x:var(--left-d);--y:var(--top-d);}
+  .build-menu:not(.tower-menu) .pos-ne{--x:var(--right-d);--y:var(--top-d);}
+  .build-menu:not(.tower-menu) .pos-sw{--x:var(--left-d);--y:var(--bottom-d);}
+  .build-menu:not(.tower-menu) .pos-se{--x:var(--right-d);--y:var(--bottom-d);}
+  .build-menu.edge-top .build-plaque{top:var(--plaque-offset);bottom:auto;}
+  .build-menu.edge-bottom .build-plaque{top:auto;bottom:var(--plaque-offset);}
+  .tower-menu #sellOption{--x:calc(var(--r)*-1);--y:0px;}
+  .tower-menu #upgradeOption{--x:var(--r);--y:0px;}
+  .tower-menu .tower-info,.tower-menu.plaque-above .tower-info{position:absolute;width:228px;transform:none;animation:none;}
   .tower-menu #upgradeOption.armed{box-shadow:0 0 0 2px #5b3f1c,0 0 0 4px #ffe0a0,0 0 0 7px #f3d98f77,inset 0 0 0 2px #f3d98faa,0 0 18px #f3d98faa;}
   .tower-menu #sellOption{background:radial-gradient(circle at 50% 30%,#a64d47,#50272b 72%);box-shadow:0 0 0 2px #522122,0 0 0 4px #df7770,0 0 0 5px #341818,inset 0 0 0 2px #ffd6d255,inset 0 -6px 10px #0006,0 6px 12px #000a;}
   .tower-menu #sellOption:hover,.tower-menu #sellOption:focus-visible{box-shadow:0 0 0 2px #522122,0 0 0 4px #ffaaa0,0 0 0 5px #341818,inset 0 0 0 2px #ffd6d2aa,0 0 18px #ff888899;}
