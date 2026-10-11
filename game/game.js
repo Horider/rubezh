@@ -74,6 +74,7 @@
   const PAD_FRAME = {w:673,h:541,ringW:652,cx:336,cy:285.5,fps:5};
   const padFrames = [1,2,3,4,5].map(i => loadImage('map-anim/pad-hover/frame-0' + i + '.png'));
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const portraitPhone = window.matchMedia('(pointer:coarse) and (orientation:portrait) and (max-width:820px)');
   // Every waterfall plays the same five frames. #1 is drawn whole at its own spot;
   // the others use only the lower falling sheet of the frame (src), stretched over their own water.
   const waterfallFrames = [1,2,3,4,5].map(i => loadImage('map-anim/waterfall-01/frame-0' + i + '.png'));
@@ -262,10 +263,11 @@
     if(!towerMenu.hidden&&selected!==null)positionRing(towerMenu,pads[selected].x,pads[selected].y-52);
   }
   function positionRing(menu,cx,cy){
-    // On phones the actions live in a bottom tray rather than over the small map.
-    if(window.matchMedia('(max-width:680px), (pointer:coarse) and (max-height:500px)').matches){
+    // Narrow windows use a tray; touch landscape uses a side panel beside the map.
+    if(window.matchMedia('(max-width:680px), (pointer:coarse) and (orientation:landscape)').matches){
       menu.style.removeProperty('left');menu.style.removeProperty('top');
       menu.classList.remove('plaque-above');
+      menu.classList.toggle('panel-left',window.matchMedia('(pointer:coarse) and (orientation:landscape)').matches&&cx>W/2);
       if(menu===towerMenu)document.getElementById('towerInfo').style.removeProperty('margin-left');
       return;
     }
@@ -414,7 +416,7 @@
     if(e.hp<=0){e.dead=true;aliveByWave[e.wave]--;gold+=e.reward;effects.push({x:e.x,y:e.y-40,life:.7,max:.7,type:'coin',value:e.reward});updateUI();}
   }
   function update(dt){
-    if(ended||paused||inMenu)return;
+    if(ended||paused||inMenu||portraitPhone.matches)return;
     if(!shieldUp&&wave>0&&wave<MAX_WAVES&&!spawnRemaining&&(waveSize-(aliveByWave[wave]||0))/waveSize>=difficulty.shieldAt){
       shieldUp=true;shieldTimer=NEXT_WAVE_DELAY;updateUI();
     }
