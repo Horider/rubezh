@@ -222,7 +222,6 @@
     upgradeOption.classList.toggle('poor',!!next&&gold<next.cost);
     upgradeOption.classList.toggle('armed',upgradeArmed);
     upgradeOption.setAttribute('aria-pressed',String(upgradeArmed));
-    upgradeOption.querySelector('.action-label').textContent=!next?'Макс. уровень':upgradeArmed?'Подтвердить':'Улучшить';
     upgradeOption.setAttribute('aria-label',next?(upgradeArmed?`Подтвердить улучшение до уровня ${p.level+1} за ${next.cost} золота`:`Показать улучшение до уровня ${p.level+1} за ${next.cost} золота`):'Высший уровень');
     document.getElementById('upgradeCost').hidden=!next;
     if(next)document.getElementById('upgradeCost').textContent=next.cost;
@@ -248,7 +247,7 @@
     document.getElementById('statSplashBox').hidden=!info.splash;
     if(info.splash)document.getElementById('statSplash').textContent=diff(info.splash,shown.splash);
     const note=document.getElementById('towerInfoNote');
-    note.textContent=option===upgradeOption?(!next?'Высший уровень, улучшать некуда.':gold<next.cost?`Не хватает ${next.cost-gold} ◆ для улучшения.`:upgradeArmed?'Нажмите «Подтвердить» ещё раз для улучшения.':`Предпросмотр: улучшение за ${next.cost} ◆`)
+    note.textContent=option===upgradeOption?(!next?'Высший уровень, улучшать некуда.':gold<next.cost?`Не хватает ${next.cost-gold} ◆ для улучшения.`:upgradeArmed?'Нажмите значок улучшения ещё раз для покупки.':`Предпросмотр: улучшение за ${next.cost} ◆`)
       :option===sellOption?`Продать за ${sellValue(p)} ◆`:TOWERS[p.type].note;
     towerMenu.classList.toggle('previewing',!!previewLevel);
   }

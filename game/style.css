@@ -175,19 +175,9 @@
 @media(prefers-reduced-motion:reduce){.tower-info{animation:none;}}
 /* The built-tower actions stay centered even when a tower is near a screen edge. */
 @media (orientation:landscape){
-  .tower-menu{position:fixed;inset:auto;left:50%;top:50%;width:min(340px,calc(100vw - 20px));height:auto;max-height:calc(100dvh - 16px);padding:12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;transform:translate(-50%,-50%);overflow:auto;pointer-events:auto;line-height:1.2;background:#102d2bf2;border:2px solid #b8863f;border-radius:10px;box-shadow:0 14px 38px #000c;}
-  .tower-menu .build-ring{display:none;}
-  .tower-menu .selection-close{display:grid;place-items:center;position:absolute;z-index:1;top:7px;right:7px;width:27px;height:27px;padding:0;border:1px solid #b8863f;border-radius:5px;background:#183b37;color:#f3d98f;font-size:20px;line-height:1;pointer-events:auto;}
-  .tower-menu .tower-info,.tower-menu.plaque-above .tower-info{position:static;grid-column:1/-1;grid-row:1;width:100%;margin:0!important;padding:8px 10px;animation:none;box-shadow:none;border:0;background:none;}
-  .tower-menu .tower-info-head{padding-right:23px;}
-  .tower-menu .tower-info p{margin:4px 0 6px;}
-  .tower-menu .build-option,.tower-menu .build-option:hover,.tower-menu .build-option:focus-visible{position:relative;top:auto;left:auto;grid-row:2;width:100%;height:66px;padding:5px 7px;display:grid;grid-template-columns:34px 1fr;grid-template-rows:1fr 1fr;align-items:center;column-gap:5px;border-radius:7px;transform:none;animation:none;box-shadow:inset 0 1px #ffffff30,0 3px 9px #0008;}
-  .tower-menu .build-option svg:not(.build-lock){grid-column:1;grid-row:1/3;width:32px;height:32px;}
-  .tower-menu .action-label{grid-column:2;grid-row:1;font-size:13px;font-weight:700;white-space:nowrap;}
-  .tower-menu .build-cost{position:static;grid-column:2;grid-row:2;justify-self:start;transform:none;clip-path:none;border-radius:3px;padding:1px 5px;font-size:11px;}
-  .tower-menu .build-option::after{display:none;}
-  .tower-menu #upgradeOption{grid-column:1;background:linear-gradient(#35614c,#1a382f);border:1px solid #b8863f;}
-  .tower-menu #upgradeOption.armed{background:linear-gradient(#82612e,#4c361d);border-color:#ffe0a0;box-shadow:0 0 0 2px #f3d98f77,inset 0 1px #ffffff55;}
-  .tower-menu #sellOption{grid-column:2;background:linear-gradient(#813d3b,#4a2528);border:1px solid #e8877c;color:#ffe1dd;}
-  .tower-menu #sellOption:hover,.tower-menu #sellOption:focus-visible{background:linear-gradient(#a54d49,#642d30);box-shadow:0 0 0 2px #e8877c88,0 4px 12px #0009;}
+  .tower-menu{position:fixed;left:50%;top:50%;width:0;height:0;pointer-events:none;}
+  .tower-menu .tower-info,.tower-menu.plaque-above .tower-info{position:absolute;left:calc(var(--r) + var(--size)/2 + 8px);top:0;width:min(228px,calc(50vw - 100px));margin:0!important;transform:translateY(-50%);animation:none;}
+  .tower-menu #upgradeOption.armed{box-shadow:0 0 0 2px #5b3f1c,0 0 0 4px #ffe0a0,0 0 0 7px #f3d98f77,inset 0 0 0 2px #f3d98faa,0 0 18px #f3d98faa;}
+  .tower-menu #sellOption{background:radial-gradient(circle at 50% 30%,#a64d47,#50272b 72%);box-shadow:0 0 0 2px #522122,0 0 0 4px #df7770,0 0 0 5px #341818,inset 0 0 0 2px #ffd6d255,inset 0 -6px 10px #0006,0 6px 12px #000a;}
+  .tower-menu #sellOption:hover,.tower-menu #sellOption:focus-visible{box-shadow:0 0 0 2px #522122,0 0 0 4px #ffaaa0,0 0 0 5px #341818,inset 0 0 0 2px #ffd6d2aa,0 0 18px #ff888899;}
 }
