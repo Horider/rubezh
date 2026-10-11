@@ -165,7 +165,7 @@
   const buildChoices=[[chooseArcher,'archer','archerCost'],[chooseMage,'mage','mageCost']];
   const towerMenu=document.getElementById('towerMenu');
   const upgradeOption=document.getElementById('upgradeOption'),sellOption=document.getElementById('sellOption');
-  let menuPad=null,previewLevel=0,previewType='archer',towerMenuPad=null;
+  let menuPad=null,previewLevel=0,previewType='archer',towerMenuPad=null,upgradeArmed=false;
   function loadImage(src){const image=new Image();image.src=src;return image;}
 
   let gold, lives, wave, selected, enemies, projectiles, effects, shieldUp, shieldTimer, aliveByWave, spawnRemaining, spawnTimer, spawnNumber, paused, speed, ended, hovered, hoverStarted, lastTime, toastTimer, enemyId;
@@ -215,18 +215,22 @@
   function sellValue(p){return Math.floor(p.invested*.6);}
   function updateTowerMenu(){
     towerMenu.hidden=selected===null||!pads[selected].level||ended;
-    if(towerMenu.hidden){towerMenuPad=null;return;}
+    if(towerMenu.hidden){towerMenuPad=null;upgradeArmed=false;return;}
     const p=pads[selected],next=stats(p,p.level+1);
+    if(towerMenuPad!==selected)upgradeArmed=false;
     if(next)upgradeOption.removeAttribute('aria-disabled');else upgradeOption.setAttribute('aria-disabled','true');
     upgradeOption.classList.toggle('poor',!!next&&gold<next.cost);
-    upgradeOption.setAttribute('aria-label',next?`Улучшить до уровня ${p.level+1} за ${next.cost} золота`:'Высший уровень');
+    upgradeOption.classList.toggle('armed',upgradeArmed);
+    upgradeOption.setAttribute('aria-pressed',String(upgradeArmed));
+    upgradeOption.querySelector('.action-label').textContent=!next?'Макс. уровень':upgradeArmed?'Подтвердить':'Улучшить';
+    upgradeOption.setAttribute('aria-label',next?(upgradeArmed?`Подтвердить улучшение до уровня ${p.level+1} за ${next.cost} золота`:`Показать улучшение до уровня ${p.level+1} за ${next.cost} золота`):'Высший уровень');
     document.getElementById('upgradeCost').hidden=!next;
     if(next)document.getElementById('upgradeCost').textContent=next.cost;
     document.getElementById('sellValue').textContent=sellValue(p);
     sellOption.setAttribute('aria-label',`Продать башню за ${sellValue(p)} золота`);
     // Keep the hovered medallion's text after an upgrade; reset only when another tower is opened.
     if(towerMenuPad!==selected){towerMenuPad=selected;setTowerInfo(null);}
-    else setTowerInfo(towerMenu.querySelector('.build-option:hover'));
+    else setTowerInfo(upgradeArmed?upgradeOption:towerMenu.querySelector('.build-option:hover'));
     positionRing(towerMenu,p.x,p.y-52);
   }
   function setTowerInfo(option){
@@ -244,7 +248,7 @@
     document.getElementById('statSplashBox').hidden=!info.splash;
     if(info.splash)document.getElementById('statSplash').textContent=diff(info.splash,shown.splash);
     const note=document.getElementById('towerInfoNote');
-    note.textContent=option===upgradeOption?(!next?'Высший уровень, улучшать некуда.':gold<next.cost?`Не хватает ${next.cost-gold} ◆ для улучшения.`:`Улучшить за ${next.cost} ◆`)
+    note.textContent=option===upgradeOption?(!next?'Высший уровень, улучшать некуда.':gold<next.cost?`Не хватает ${next.cost-gold} ◆ для улучшения.`:upgradeArmed?'Нажмите «Подтвердить» ещё раз для улучшения.':`Предпросмотр: улучшение за ${next.cost} ◆`)
       :option===sellOption?`Продать за ${sellValue(p)} ◆`:TOWERS[p.type].note;
     towerMenu.classList.toggle('previewing',!!previewLevel);
   }
@@ -271,6 +275,12 @@
         const card=document.getElementById('towerInfo');
         card.style.removeProperty('margin-left');card.style.removeProperty('top');card.style.removeProperty('bottom');
       }
+      return;
+    }
+    if(menu===towerMenu&&window.matchMedia('(orientation:landscape)').matches){
+      menu.style.removeProperty('left');menu.style.removeProperty('top');
+      const card=document.getElementById('towerInfo');
+      card.style.removeProperty('margin-left');card.style.removeProperty('top');card.style.removeProperty('bottom');
       return;
     }
     const width=canvas.clientWidth;
@@ -701,7 +711,16 @@
   canvas.addEventListener('pointerleave',()=>{hovered=null;canvas.style.cursor='default';});
   canvas.addEventListener('click',event=>{selected=padAt(canvasPoint(event));updateUI();});
   for(const [button,type] of buildChoices)button.addEventListener('click',()=>{if(selected!==null&&!pads[selected].level)buildTower(pads[selected],type);});
-  upgradeOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level&&p.level<5)buildTower(p);});
+  upgradeOption.addEventListener('click',()=>{
+    const p=pads[selected];if(!p||!p.level||p.level>=5)return;
+    if(!upgradeArmed){
+      if(gold>=stats(p,p.level+1).cost){upgradeArmed=true;updateTowerMenu();}
+      setTowerInfo(upgradeOption);
+      return;
+    }
+    upgradeArmed=false;buildTower(p);
+    if(!towerMenu.hidden)setTowerInfo(null);
+  });
   sellOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level){sellTower(p);selected=null;updateUI();}});
   for(const button of document.querySelectorAll('.selection-close'))button.addEventListener('click',()=>{selected=null;updateUI();canvas.focus({preventScroll:true});});
   document.addEventListener('pointerdown',event=>{
@@ -710,7 +729,7 @@
   });
   for(const [menu,set] of [[buildMenu,setPlaque],[towerMenu,setTowerInfo]])for(const option of menu.querySelectorAll('.build-option')){
     for(const type of ['pointerenter','focus'])option.addEventListener(type,()=>set(option));
-    for(const type of ['pointerleave','blur'])option.addEventListener(type,()=>{if(!menu.hidden)set(null);});
+    for(const type of ['pointerleave','blur'])option.addEventListener(type,()=>{if(!menu.hidden)set(menu===towerMenu&&upgradeArmed?upgradeOption:null);});
   }
   window.addEventListener('resize',positionBuildMenu);
   window.visualViewport?.addEventListener('resize',positionBuildMenu);
