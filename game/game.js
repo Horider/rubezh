@@ -263,12 +263,14 @@
     if(!towerMenu.hidden&&selected!==null)positionRing(towerMenu,pads[selected].x,pads[selected].y-52);
   }
   function positionRing(menu,cx,cy){
-    // Narrow windows use a tray; touch landscape uses a side panel beside the map.
-    if(window.matchMedia('(max-width:680px), (pointer:coarse) and (orientation:landscape)').matches){
+    // The portrait fallback uses a tray; landscape keeps the radial selector on the map.
+    if(window.matchMedia('(max-width:680px) and (orientation:portrait)').matches){
       menu.style.removeProperty('left');menu.style.removeProperty('top');
       menu.classList.remove('plaque-above');
-      menu.classList.toggle('panel-left',window.matchMedia('(pointer:coarse) and (orientation:landscape)').matches&&cx>W/2);
-      if(menu===towerMenu)document.getElementById('towerInfo').style.removeProperty('margin-left');
+      if(menu===towerMenu){
+        const card=document.getElementById('towerInfo');
+        card.style.removeProperty('margin-left');card.style.removeProperty('top');card.style.removeProperty('bottom');
+      }
       return;
     }
     const width=canvas.clientWidth,height=canvas.clientHeight;
@@ -277,15 +279,34 @@
     const reach=(menu===towerMenu?r:r*.71)+size/2+6;
     menu.style.setProperty('--size',size+'px');menu.style.setProperty('--r',r+'px');
     const x=cx/W*width,y=cy/H*height;
-    const top=Math.max(reach,Math.min(height-reach,y));
+    let top=Math.max(reach,Math.min(height-reach,y));
+    // Keep the two entrance-pad choices clear of the wave shield on short screens.
+    if(menu===buildMenu&&window.matchMedia('(pointer:coarse) and (orientation:landscape)').matches&&height<500&&cy<300&&Math.abs(cx-SHIELD_POS.x)<250){
+      top=Math.max(top,Math.min(166,height-120));
+    }
     const left=Math.max(reach,Math.min(width-reach,x));
     menu.style.left=left+'px';
     menu.style.top=top+'px';
-    if(menu===buildMenu){menu.classList.toggle('plaque-above',top+reach+44>height);return;}
-    // The tower card sits under the ring, or above it near the bottom edge, and never leaves the map.
+    if(menu===buildMenu){
+      menu.classList.toggle('plaque-above',top+reach+44>height);
+      const plaque=menu.querySelector('.build-plaque'),pw=plaque.offsetWidth;
+      plaque.style.marginLeft=Math.max(8+pw/2-left,Math.min(width-8-pw/2-left,0))+'px';
+      return;
+    }
+    // Place the tower card below, above, or beside the ring according to free space.
     const card=document.getElementById('towerInfo'),cw=card.offsetWidth,ch=card.offsetHeight;
-    menu.classList.toggle('plaque-above',top+reach+ch+12>height);
-    card.style.marginLeft=Math.max(8-left,Math.min(width-8-left-cw,-cw/2))+'px';
+    const below=top+reach+12,above=top-reach-ch-12;
+    let cardTop,cardLeft=Math.max(8,Math.min(width-8-cw,left-cw/2));
+    if(below+ch<=height-8)cardTop=below;
+    else if(above>=8)cardTop=above;
+    else{
+      cardTop=Math.max(8,Math.min(height-ch-8,top+reach/2));
+      const right=left+reach+12;
+      cardLeft=right+cw<=width-8?right:Math.max(8,left-reach-12-cw);
+    }
+    menu.classList.toggle('plaque-above',cardTop<top);
+    card.style.top=(cardTop-top)+'px';card.style.bottom='auto';
+    card.style.marginLeft=(cardLeft-left)+'px';
   }
   function buildTower(p,type=p.type){
     if(ended||p.level>=5)return;
@@ -293,7 +314,8 @@
     const next=stats(p,p.level+1);if(gold<next.cost){toast('Недостаточно золота');return;}
     gold-=next.cost;p.invested+=next.cost;p.level++;p.cooldown=.2;
     effects.push({x:p.x,y:p.y-33,life:.55,max:.55,type:'build'});
-    toast(p.level===1?'Башня построена':`Башня улучшена до ${p.level} уровня`);updateUI();
+    if(p.level>1)toast(`Башня улучшена до ${p.level} уровня`);
+    updateUI();
   }
   function sellTower(p){if(!p.level||ended)return;gold+=Math.floor(p.invested*.6);p.level=0;p.invested=0;p.cooldown=0;toast('Башня продана');updateUI();}
   function earlyBonus(){return wave>0&&shieldTimer>0?Math.max(1,Math.round(shieldTimer/NEXT_WAVE_DELAY*EARLY_BONUS_MAX)):0;}
