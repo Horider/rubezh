@@ -299,15 +299,17 @@
       const preferBelow=cy<300||anchorY-(reach+16)/zoom<viewTop;
       const neededBelow=d+(preferBelow?rowGap:0)+size/2+14+plaqueHeight;
       const bottomEdge=anchorY+neededBelow/zoom>viewBottom;
-      const topEdge=preferBelow&&!bottomEdge;
+      // Pinch zoom keeps the four choices around the pad instead of shifting the group.
+      const topEdge=zoom<=1.05&&preferBelow&&!bottomEdge;
+      const shiftAbove=zoom<=1.05&&bottomEdge;
       menu.classList.toggle('edge-top',topEdge);
-      menu.classList.toggle('edge-bottom',!topEdge&&bottomEdge);
+      menu.classList.toggle('edge-bottom',shiftAbove);
       menu.style.setProperty('--left-d',-d+'px');menu.style.setProperty('--right-d',d+'px');
-      menu.style.setProperty('--top-d',(topEdge?d:bottomEdge?-d-rowGap:-d)+'px');
-      menu.style.setProperty('--bottom-d',(topEdge?d+rowGap:bottomEdge?-d:d)+'px');
+      menu.style.setProperty('--top-d',(topEdge?d:shiftAbove?-d-rowGap:-d)+'px');
+      menu.style.setProperty('--bottom-d',(topEdge?d+rowGap:shiftAbove?-d:d)+'px');
       menu.style.setProperty('--plaque-offset',(d+rowGap+size/2+14)+'px');
-      if(bottomEdge&&!topEdge)menu.style.setProperty('--r',Math.max(16,Math.min(r,(viewBottom-anchorY)*zoom-8))+'px');
-      menu.classList.toggle('plaque-above',!topEdge&&bottomEdge);
+      if(shiftAbove)menu.style.setProperty('--r',Math.max(16,Math.min(r,(viewBottom-anchorY)*zoom-8))+'px');
+      menu.classList.toggle('plaque-above',shiftAbove||zoom>1.05&&cy>H/2);
       const pw=plaque.offsetWidth;
       const plaqueShift=Math.max(viewLeft+8/zoom+pw/(2*zoom)-anchorX,Math.min(viewRight-8/zoom-pw/(2*zoom)-anchorX,0));
       plaque.style.marginLeft=plaqueShift*zoom+'px';
@@ -317,8 +319,9 @@
     const card=document.getElementById('towerInfo'),cw=card.offsetWidth,ch=card.offsetHeight;
     const right=anchorX+(reach+12)/zoom,left=anchorX-(reach+12+cw)/zoom;
     const cardLeft=right+cw/zoom<=viewRight-8/zoom?right:left>=viewLeft+8/zoom?left:Math.max(viewLeft+8/zoom,Math.min(viewRight-(cw+8)/zoom,right));
-    const cardTop=Math.max(viewTop+8/zoom,Math.min(viewBottom-(ch+8)/zoom,anchorY-ch/(2*zoom)));
-    card.style.left=(cardLeft-anchorX)*zoom+'px';card.style.top=(cardTop-anchorY)*zoom+'px';
+    // Keep the card on the tower anchor while pinching; at 1× fit low towers on screen.
+    const cardTop=zoom<=1.05?Math.max(8,Math.min(window.innerHeight-ch-8,anchorY-ch/2))-anchorY:-ch/2;
+    card.style.left=(cardLeft-anchorX)*zoom+'px';card.style.top=cardTop+'px';
     card.style.bottom='auto';card.style.marginLeft='0';
   }
   function buildTower(p,type=p.type){
