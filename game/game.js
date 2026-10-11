@@ -186,7 +186,7 @@
     updateUI();
     (el.menu.querySelector('.banner.last')||el.menu.querySelector('.banner')).focus();
   }
-  function closeMenu(){inMenu=false;el.menu.hidden=true;lastTime=performance.now();updateUI();canvas.focus();}
+  function closeMenu(){inMenu=false;el.menu.hidden=true;lastTime=performance.now();updateUI();canvas.focus({preventScroll:true});}
   function startGame(key){
     difficulty=DIFFICULTIES[key];difficultyKey=key;gameStarted=true;
     try{localStorage.setItem('td-difficulty',key);}catch(error){}
@@ -273,7 +273,10 @@
       }
       return;
     }
-    const width=canvas.clientWidth,height=canvas.clientHeight;
+    const width=canvas.clientWidth;
+    // On wide phones the map is uniformly zoomed and its decorative bottom is clipped.
+    // Keep selectors inside the visible part of the canvas.
+    const height=Math.min(canvas.clientHeight,window.innerHeight-canvas.getBoundingClientRect().top-4);
     // Ring size follows the canvas so it never swallows neighbouring pads.
     const size=Math.max(42,Math.min(60,width*.042)),r=Math.max(52,Math.min(80,width*.05));
     const reach=(menu===towerMenu?r:r*.71)+size/2+6;
@@ -700,7 +703,7 @@
   for(const [button,type] of buildChoices)button.addEventListener('click',()=>{if(selected!==null&&!pads[selected].level)buildTower(pads[selected],type);});
   upgradeOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level&&p.level<5)buildTower(p);});
   sellOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level){sellTower(p);selected=null;updateUI();}});
-  for(const button of document.querySelectorAll('.selection-close'))button.addEventListener('click',()=>{selected=null;updateUI();canvas.focus();});
+  for(const button of document.querySelectorAll('.selection-close'))button.addEventListener('click',()=>{selected=null;updateUI();canvas.focus({preventScroll:true});});
   document.addEventListener('pointerdown',event=>{
     const open=!buildMenu.hidden||!towerMenu.hidden,inside=buildMenu.contains(event.target)||towerMenu.contains(event.target);
     if(open&&event.target!==canvas&&!inside){selected=null;updateUI();}
@@ -710,6 +713,7 @@
     for(const type of ['pointerleave','blur'])option.addEventListener(type,()=>{if(!menu.hidden)set(null);});
   }
   window.addEventListener('resize',positionBuildMenu);
+  window.visualViewport?.addEventListener('resize',positionBuildMenu);
   el.waveShield.addEventListener('click',startWave);
   el.pauseButton.addEventListener('click',()=>{if(ended)return;paused=!paused;updateUI();});
   el.speedButton.addEventListener('click',()=>{speed=speed===1?2:1;updateUI();});
