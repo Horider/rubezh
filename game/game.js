@@ -50,11 +50,12 @@
   const canvas = document.getElementById('gameCanvas');
   const ctx = canvas.getContext('2d');
   const el = Object.fromEntries(['gold','lives','wave','waveShield','pauseButton','speedButton','restartButton','toast','stageMessage','menu','menuResume','jevStatus','jevKey','jevModel','jevSave','jevForget'].map(id => [id, document.getElementById(id)]));
-  const pads = [
-    {x:730,y:238},{x:944,y:234},{x:342,y:412},{x:1324,y:421},
-    {x:123,y:540},{x:1546,y:540},{x:157,y:740},{x:1523,y:740}
-  ].map((pad, id) => ({...pad,id,level:0,cooldown:0,invested:0}));
-  // Stone ring of each pad as painted on the map: centre and visible width.
+  // The painted stone rings are the single source of truth for building and menu anchors.
+  const padRings = [
+    {x:729.5,y:238.5,w:96},{x:943.5,y:234,w:96},{x:342.5,y:413.5,w:98},{x:1325,y:423.5,w:97},
+    {x:123,y:539.5,w:99},{x:1545.5,y:540.5,w:98},{x:157.5,y:740,w:100},{x:1520,y:740.5,w:99}
+  ];
+  const pads = padRings.map(({x,y}, id) => ({x,y,id,level:0,cooldown:0,invested:0}));
   // Our banners at the two exits (left and right), five frames each, drawn 1:1 at their map spot.
   const FLAG_FPS = 6;
   const flagSets = [{name:'flags-left',x:17,y:554},{name:'flags-right',x:1603,y:554}]
@@ -66,10 +67,6 @@
   const ARCH_FPS = 6;
   const arches = [{name:'arch-23',x:1169,y:661}]
     .map(arch => ({...arch,frames:[1,2,3,4,5].map(i => loadImage('map-anim/' + arch.name + '/frame-0' + i + '.png'))}));
-  const padRings = [
-    {x:729.5,y:238.5,w:96},{x:943.5,y:234,w:96},{x:342.5,y:413.5,w:98},{x:1325,y:423.5,w:97},
-    {x:123,y:539.5,w:99},{x:1545.5,y:540.5,w:98},{x:157.5,y:740,w:100},{x:1520,y:740.5,w:99}
-  ];
   // Hover frames are 673 × 541; the ring inside is 652 px wide, centred at (336, 285.5).
   const PAD_FRAME = {w:673,h:541,ringW:652,cx:336,cy:285.5,fps:5};
   const padFrames = [1,2,3,4,5].map(i => loadImage('map-anim/pad-hover/frame-0' + i + '.png'));
@@ -293,8 +290,9 @@
     if(menu===towerMenu&&landscape)r=Math.max(18,Math.min(r,(anchorX-viewLeft)*zoom-size/2-8,(viewRight-anchorX)*zoom-size/2-8,(anchorY-viewTop)*zoom-8,(viewBottom-anchorY)*zoom-8));
     const reach=r+size/2+6;
     menu.style.setProperty('--size',size+'px');menu.style.setProperty('--r',r+'px');
-    menu.style.left=anchorX+'px';
-    menu.style.top=anchorY+'px';
+    // The ring shares the canvas field's coordinates, so it follows every pan and zoom.
+    menu.style.left=(canvas.offsetLeft+x)+'px';
+    menu.style.top=(canvas.offsetTop+y)+'px';
     if(menu===buildMenu){
       const d=r*.71,rowGap=size+10;
       const plaque=menu.querySelector('.build-plaque'),plaqueHeight=plaque.offsetHeight;
@@ -694,7 +692,16 @@
     else{ctx.fillStyle=fx.type==='hit'?'#fff2bc':'#ffdd93';ctx.beginPath();ctx.arc(fx.x,fx.y,fx.type==='hit'?(1-t)*15+3:7*t,0,Math.PI*2);ctx.fill();}
     ctx.restore();
   }
-  function loop(now){let dt=Math.min((now-lastTime)/1000,.05);lastTime=now;update(dt*speed);draw();requestAnimationFrame(loop);}
+  let lastMenuViewport='';
+  function loop(now){
+    let dt=Math.min((now-lastTime)/1000,.05);lastTime=now;
+    if(!buildMenu.hidden||!towerMenu.hidden){
+      const v=window.visualViewport;
+      const state=[v?.scale||1,v?.offsetLeft||0,v?.offsetTop||0,v?.width||window.innerWidth,v?.height||window.innerHeight].join(',');
+      if(state!==lastMenuViewport){lastMenuViewport=state;positionBuildMenu();}
+    }else lastMenuViewport='';
+    update(dt*speed);draw();requestAnimationFrame(loop);
+  }
   function canvasPoint(event){const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*W/rect.width,y:(event.clientY-rect.top)*H/rect.height};}
   function padAt(point){
     // The painted pads shrink to about 24 px on a portrait phone. Keep them
