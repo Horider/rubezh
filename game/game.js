@@ -262,6 +262,13 @@
     if(!towerMenu.hidden&&selected!==null)positionRing(towerMenu,pads[selected].x,pads[selected].y-52);
   }
   function positionRing(menu,cx,cy){
+    // On phones the actions live in a bottom tray rather than over the small map.
+    if(window.matchMedia('(max-width:680px), (pointer:coarse) and (max-height:500px)').matches){
+      menu.style.removeProperty('left');menu.style.removeProperty('top');
+      menu.classList.remove('plaque-above');
+      if(menu===towerMenu)document.getElementById('towerInfo').style.removeProperty('margin-left');
+      return;
+    }
     const width=canvas.clientWidth,height=canvas.clientHeight;
     // Ring size follows the canvas so it never swallows neighbouring pads.
     const size=Math.max(42,Math.min(60,width*.042)),r=Math.max(52,Math.min(80,width*.05));
@@ -651,7 +658,10 @@
   function loop(now){let dt=Math.min((now-lastTime)/1000,.05);lastTime=now;update(dt*speed);draw();requestAnimationFrame(loop);}
   function canvasPoint(event){const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*W/rect.width,y:(event.clientY-rect.top)*H/rect.height};}
   function padAt(point){
-    let found=null,best=60;
+    // The painted pads shrink to about 24 px on a portrait phone. Keep them
+    // selectable with a finger while choosing the nearest pad in close pairs.
+    const touchRadius=window.matchMedia('(pointer:coarse)').matches?24*W/canvas.clientWidth:60;
+    let found=null,best=Math.max(60,touchRadius);
     for(const p of pads){
       // A built tower is also clickable by its body, not just the stone pad under it.
       const onTower=p.level&&Math.abs(point.x-p.x)<48&&point.y>p.y-118&&point.y<p.y+25;
@@ -666,6 +676,7 @@
   for(const [button,type] of buildChoices)button.addEventListener('click',()=>{if(selected!==null&&!pads[selected].level)buildTower(pads[selected],type);});
   upgradeOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level&&p.level<5)buildTower(p);});
   sellOption.addEventListener('click',()=>{const p=pads[selected];if(p&&p.level){sellTower(p);selected=null;updateUI();}});
+  for(const button of document.querySelectorAll('.selection-close'))button.addEventListener('click',()=>{selected=null;updateUI();canvas.focus();});
   document.addEventListener('pointerdown',event=>{
     const open=!buildMenu.hidden||!towerMenu.hidden,inside=buildMenu.contains(event.target)||towerMenu.contains(event.target);
     if(open&&event.target!==canvas&&!inside){selected=null;updateUI();}

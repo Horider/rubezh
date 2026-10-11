@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#102b2b">
   <title>Лесной рубеж</title>
   <link rel="stylesheet" href="style.css">
@@ -13,6 +13,7 @@
           <canvas id="gameCanvas" width="1672" height="941" tabindex="0" aria-label="Карта с восемью площадками для башен. Клавиши 1–8 выбирают площадку"></canvas>
           <div id="buildMenu" class="build-menu" role="group" aria-label="Выбор башни" hidden>
             <div class="build-ring" aria-hidden="true"></div>
+            <button class="selection-close" type="button" aria-label="Закрыть выбор">×</button>
             <button id="chooseArcher" class="build-option pos-nw" type="button" data-name="Лучники" data-type="archer" aria-label="Построить башню лучников за 90 золота">
               <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M16 7Q40 24 16 41" stroke="#f3d98f" stroke-width="3.5"/><path d="M16 7L20 24 16 41" stroke="#e8dcc0" stroke-width="1.5"/><path d="M8 24H38M32 19.5L38 24 32 28.5M8 24L5 21M8 24L5 27" stroke="#f0e5c4" stroke-width="2.5"/></svg>
               <span id="archerCost" class="build-cost">90</span>
@@ -27,6 +28,7 @@
           </div>
           <div id="towerMenu" class="build-menu tower-menu" role="group" aria-label="Действия с башней" hidden>
             <div class="build-ring" aria-hidden="true"></div>
+            <button class="selection-close" type="button" aria-label="Закрыть выбор">×</button>
             <button id="upgradeOption" class="build-option pos-n" type="button" data-name="Улучшить">
               <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M13 27L24 16 35 27" stroke="#f3d98f" stroke-width="4"/><path d="M13 38L24 27 35 38" stroke="#f0e5c4" stroke-width="3"/><path d="M24 5V9M19 7H29" stroke="#f3d98f" stroke-width="2"/></svg>
               <span id="upgradeCost" class="build-cost">75</span>
