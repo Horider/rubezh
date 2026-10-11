@@ -175,7 +175,7 @@
 @media(prefers-reduced-motion:reduce){.tower-info{animation:none;}}
 /* Menus stay anchored to the selected pad or tower, including near map edges. */
 @media (orientation:landscape){
-  .build-menu{position:fixed;z-index:5;}
+  .build-menu{position:fixed;z-index:5;transform:scale(var(--ui-scale,1));transform-origin:0 0;}
   .build-menu:not(.tower-menu) .pos-nw{--x:var(--left-d);--y:var(--top-d);}
   .build-menu:not(.tower-menu) .pos-ne{--x:var(--right-d);--y:var(--top-d);}
   .build-menu:not(.tower-menu) .pos-sw{--x:var(--left-d);--y:var(--bottom-d);}

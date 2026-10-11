@@ -277,9 +277,12 @@
       return;
     }
     const width=canvas.clientWidth;
-    // On wide phones the map is uniformly zoomed and its decorative bottom is clipped.
-    // Keep selectors inside the visible part of the canvas.
-    const height=Math.min(canvas.clientHeight,window.innerHeight-canvas.getBoundingClientRect().top-4);
+    const viewport=window.visualViewport,zoom=viewport?.scale||1;
+    const viewLeft=viewport?.offsetLeft||0,viewTop=viewport?.offsetTop||0;
+    const viewRight=viewLeft+(viewport?.width||window.innerWidth);
+    const viewBottom=viewTop+(viewport?.height||window.innerHeight);
+    // Undo browser pinch zoom on the controls while keeping their origin on the map.
+    menu.style.setProperty('--ui-scale',String(1/zoom));
     // Ring size follows the canvas so it never swallows neighbouring pads.
     const size=Math.max(42,Math.min(60,width*.042));
     let r=Math.max(52,Math.min(80,width*.05));
@@ -287,34 +290,37 @@
     const rect=canvas.getBoundingClientRect(),landscape=window.matchMedia('(orientation:landscape)').matches;
     const anchorX=landscape?rect.left+x:canvas.offsetLeft+x;
     const anchorY=landscape?rect.top+y:canvas.offsetTop+y;
-    if(menu===towerMenu&&landscape)r=Math.max(18,Math.min(r,anchorX-size/2-8,window.innerWidth-anchorX-size/2-8,anchorY-8,window.innerHeight-anchorY-8));
+    if(menu===towerMenu&&landscape)r=Math.max(18,Math.min(r,(anchorX-viewLeft)*zoom-size/2-8,(viewRight-anchorX)*zoom-size/2-8,(anchorY-viewTop)*zoom-8,(viewBottom-anchorY)*zoom-8));
     const reach=r+size/2+6;
     menu.style.setProperty('--size',size+'px');menu.style.setProperty('--r',r+'px');
     menu.style.left=anchorX+'px';
     menu.style.top=anchorY+'px';
     if(menu===buildMenu){
-      const d=r*.71,topEdge=cy<300,bottomEdge=y+reach+60>height;
-      const rowGap=size+10;
+      const d=r*.71,rowGap=size+10;
+      const plaque=menu.querySelector('.build-plaque'),plaqueHeight=plaque.offsetHeight;
+      const preferBelow=cy<300||anchorY-(reach+16)/zoom<viewTop;
+      const neededBelow=d+(preferBelow?rowGap:0)+size/2+14+plaqueHeight;
+      const bottomEdge=anchorY+neededBelow/zoom>viewBottom;
+      const topEdge=preferBelow&&!bottomEdge;
       menu.classList.toggle('edge-top',topEdge);
       menu.classList.toggle('edge-bottom',!topEdge&&bottomEdge);
       menu.style.setProperty('--left-d',-d+'px');menu.style.setProperty('--right-d',d+'px');
       menu.style.setProperty('--top-d',(topEdge?d:bottomEdge?-d-rowGap:-d)+'px');
       menu.style.setProperty('--bottom-d',(topEdge?d+rowGap:bottomEdge?-d:d)+'px');
       menu.style.setProperty('--plaque-offset',(d+rowGap+size/2+14)+'px');
-      if(bottomEdge&&!topEdge)menu.style.setProperty('--r',Math.max(16,Math.min(r,height-y-8))+'px');
+      if(bottomEdge&&!topEdge)menu.style.setProperty('--r',Math.max(16,Math.min(r,(viewBottom-anchorY)*zoom-8))+'px');
       menu.classList.toggle('plaque-above',!topEdge&&bottomEdge);
-      const plaque=menu.querySelector('.build-plaque'),pw=plaque.offsetWidth;
-      const centerX=landscape?anchorX:x,boundWidth=landscape?window.innerWidth:width;
-      plaque.style.marginLeft=Math.max(8+pw/2-centerX,Math.min(boundWidth-8-pw/2-centerX,0))+'px';
+      const pw=plaque.offsetWidth;
+      const plaqueShift=Math.max(viewLeft+8/zoom+pw/(2*zoom)-anchorX,Math.min(viewRight-8/zoom-pw/(2*zoom)-anchorX,0));
+      plaque.style.marginLeft=plaqueShift*zoom+'px';
       return;
     }
     // Keep the two action buttons centered on the tower; only the info card changes side.
     const card=document.getElementById('towerInfo'),cw=card.offsetWidth,ch=card.offsetHeight;
-    const screenX=rect.left+x,screenY=rect.top+y;
-    const right=screenX+reach+12,left=screenX-reach-12-cw;
-    const cardLeft=right+cw<=window.innerWidth-8?right:left>=8?left:Math.max(8,Math.min(window.innerWidth-cw-8,right));
-    const cardTop=Math.max(8,Math.min(window.innerHeight-ch-8,screenY-ch/2));
-    card.style.left=(cardLeft-screenX)+'px';card.style.top=(cardTop-screenY)+'px';
+    const right=anchorX+(reach+12)/zoom,left=anchorX-(reach+12+cw)/zoom;
+    const cardLeft=right+cw/zoom<=viewRight-8/zoom?right:left>=viewLeft+8/zoom?left:Math.max(viewLeft+8/zoom,Math.min(viewRight-(cw+8)/zoom,right));
+    const cardTop=Math.max(viewTop+8/zoom,Math.min(viewBottom-(ch+8)/zoom,anchorY-ch/(2*zoom)));
+    card.style.left=(cardLeft-anchorX)*zoom+'px';card.style.top=(cardTop-anchorY)*zoom+'px';
     card.style.bottom='auto';card.style.marginLeft='0';
   }
   function buildTower(p,type=p.type){
@@ -729,6 +735,7 @@
   }
   window.addEventListener('resize',positionBuildMenu);
   window.visualViewport?.addEventListener('resize',positionBuildMenu);
+  window.visualViewport?.addEventListener('scroll',positionBuildMenu);
   el.waveShield.addEventListener('click',startWave);
   el.pauseButton.addEventListener('click',()=>{if(ended)return;paused=!paused;updateUI();});
   el.speedButton.addEventListener('click',()=>{speed=speed===1?2:1;updateUI();});
